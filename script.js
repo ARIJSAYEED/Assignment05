@@ -1,4 +1,5 @@
-// like button calulation 
+// like button calulation
+
 let likes = document.getElementsByClassName('likes');
 for (const like of likes) {
     like.addEventListener('click', function () {
@@ -10,7 +11,7 @@ for (const like of likes) {
     })
 }
 
-// Call button
+// Call button functionality
 
 let callBtns = document.getElementsByClassName('call-btns');
 
@@ -37,3 +38,26 @@ for (const callbtn of callBtns) {
     })
 }
 
+
+// copy button functionality 
+let copyBtns = document.getElementsByClassName('copy-btns')
+
+for (const copyBtn of copyBtns) {
+    copyBtn.addEventListener('click', function () {
+
+        const card = copyBtn.closest('.cards');
+        const serviceNumber = card.querySelector('.service-numbers').innerText;
+        navigator.clipboard.writeText(serviceNumber)
+            .then(() => {
+                alert('Copied: ' + serviceNumber);
+            })
+            .catch(err => {
+                console.error('Failed to copy:', err);
+            })
+
+
+        let totalCopyCount = parseInt(document.getElementById('total-copy-count').innerText);
+        totalCopyCount = totalCopyCount + 1
+        document.getElementById('total-copy-count').innerText = totalCopyCount
+    })
+}                
