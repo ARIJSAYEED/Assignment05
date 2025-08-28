@@ -13,30 +13,58 @@ for (const like of likes) {
 
 // Call button functionality
 
+let historys = [];
 let callBtns = document.getElementsByClassName('call-btns');
 
 for (const callbtn of callBtns) {
     callbtn.addEventListener('click', function () {
-        let totalCoinCount = document.getElementById('total-coin-count').innerText;
-
+        let totalCoinCount = parseInt(document.getElementById('total-coin-count').innerText);
 
         if (totalCoinCount >= 20) {
             let cards = this.closest('.cards');
+            let serviceTitle = cards.querySelector('.service-title').innerText;
             let serviceName = cards.querySelector('.service-names').innerText;
             let serviceNumber = cards.querySelector('.service-numbers').innerText;
             alert(`📞 Calling ${serviceName} ${serviceNumber}`);
 
-            let coinPoint = 20
-            let totalCoinCount = document.getElementById('total-coin-count').innerText;
-            totalCoinCount = totalCoinCount - coinPoint
-            document.getElementById('total-coin-count').innerText = totalCoinCount
 
+            totalCoinCount -= 20;
+            document.getElementById('total-coin-count').innerText = totalCoinCount;
+
+
+            let callData = {
+                service: serviceTitle,
+                number: serviceNumber,
+                date: new Date().toLocaleTimeString()
+            };
+            historys.push(callData);
+
+
+            let callHistory = document.getElementById('call-history');
+            callHistory.innerHTML = "";
+
+            for (const history of historys) {
+                let div = document.createElement('div');
+                div.innerHTML = `
+                    <div class="bg-gray-100 flex justify-between items-center mt-3 p-4 rounded-lg max-sm:flex-col max-sm:items-start">
+                        <div>
+                            <h1 class="text-lg font-semibold">${history.service}</h1>
+                            <p class="text-gray-600 text-lg">${history.number}</p>
+                        </div>
+                        <div>
+                            <p class="text-lg">${history.date}</p>
+                        </div>
+                    </div>
+                `;
+                callHistory.appendChild(div);
+            }
+
+        } else {
+            alert("❌ You can't make the call (not enough coins)");
         }
-        else {
-            alert('you cant make the call')
-        }
-    })
+    });
 }
+
 
 
 // copy button functionality 
@@ -60,4 +88,11 @@ for (const copyBtn of copyBtns) {
         totalCopyCount = totalCopyCount + 1
         document.getElementById('total-copy-count').innerText = totalCopyCount
     })
-}                
+}
+
+// Clear button functionality
+
+document.querySelector(".clear-history-btn").addEventListener("click", function () {
+    historys = [];
+    document.getElementById("call-history").innerHTML = "";
+});
